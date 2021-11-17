@@ -1,0 +1,28 @@
+{
+  "configurations": [
+    
+  
+    {
+      "name": "Debug Windows Hermes - Experimental",
+      "request": "launch",
+      "type": "reactnativedirect",
+      "cwd": "${workspaceFolder}",
+      "platform": "windows"
+    },
+    {
+      "name": "Attach to packager",
+      "request": "attach",
+      "type": "reactnative",
+      "cwd": "${workspaceFolder}",
+      "address": "http://localhost:19006/",
+      "port": 19006
+    },
+    {
+      "name": "Attach to packager",
+      "cwd": "${workspaceFolder}",
+      "type": "reactnative",
+      "request": "attach"
+    }
+    
+  ]
+}

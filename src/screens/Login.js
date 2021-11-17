@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   iniciarSesionBtn:{
     alignSelf:"center",
-    width: Dimensions.get("window").width/2.2,
+    width: 200,
     justifyContent:"center",
     margin:15
   },
