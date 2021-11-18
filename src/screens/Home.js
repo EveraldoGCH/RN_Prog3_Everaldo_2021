@@ -37,10 +37,8 @@ class Home extends Component {
       this.state.logged ?
     
       <View>
-        <Text>{auth.currentUser.displayName}</Text>
-        <Text>POSTEOS:</Text>
         { this.state.loading ?
-          <ActivityIndicator size='large' color='blue'/> :
+          <ActivityIndicator size='large' color='black'/> :
             <FlatList
               data={this.state.characters}
               keyExtractor={ post => post.id}

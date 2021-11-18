@@ -25,6 +25,7 @@ class NuevoPost extends Component {
       })
       .then(() => {
           console.log("Documento subido!");
+          this.props.drawerProps.navigation.navigate("Home");
       })
       .catch((error) => {
           console.error("Error escribiendo el documento: ", error);

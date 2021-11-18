@@ -14,7 +14,7 @@ class Post extends Component {
            comment:'',
         }
     }
-    //Likear y deslikear solo si llegamos con el tiempo
+    //Toma los likes
     componentDidMount(){
         if(this.props.doc.data.likes){
             let likes = this.props.doc.data.likes.length;
@@ -31,7 +31,6 @@ class Post extends Component {
     //Likear y deslikear solo si llegamos con el tiempo
     like(){        
         let thisDoc = db.collection('posts').doc(this.props.doc.id);
-
         thisDoc.update(
             { likes: firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email)}
             //ArrayUnion https://firebase.google.com/docs/firestore/manage-data/add-data#update_elements_in_an_array
@@ -40,11 +39,10 @@ class Post extends Component {
             this.setState({
                 liked:true,
                 likes: this.state.likes + 1,
-            },
-            console.log('likeado ok'))
-            )
+            },))
         .catch(e => console.log(e))
     }
+
     //Likear y deslikear solo si llegamos con el tiempo
     unLike(){
         let thisDoc = db.collection('posts').doc(this.props.doc.id);
@@ -58,9 +56,7 @@ class Post extends Component {
             this.setState({
                 liked:false,
                 likes: this.state.likes - 1,
-            },
-            console.log('deslikeado ok'))
-            )
+            },))
         .catch(e => console.log(e))
     }
     
@@ -102,29 +98,44 @@ class Post extends Component {
     }
 
 
-    render(){  
+    render(){ 
         return(
             <View style={styles.container}>
-                <Image style={{flex:1, width:Dimensions.get('window').width/1.05, 
-                height:Dimensions.get('window').width/1.3}}
+                <Image style={styles.imageContainer}
                 source={{uri:this.props.doc.data.image}}
                 />
-                <Text>Posteo de: {this.props.doc.data.owner}</Text>
-                <Text> {this.props.doc.data.description}</Text>
-                <View>
-                    { this.state.liked === true ?
+            {/*Fonts like y comentarios*/}
+                <View style={styles.fonts}>
+                { this.state.liked === true ?
                         <TouchableOpacity onPress={()=>this.unLike()}>
-                            <Text>Quitar like</Text>
+                            <Image 
+                            source={"https://img.icons8.com/ios-filled/50/fa314a/like--v1.png"}
+                            style={styles.unLikedFont}/>
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={()=>this.like()}>
-                            <Text>Me gusta</Text>
+                            <Image 
+                            source={"https://img.icons8.com/ios/50/000000/like--v1.png"}
+                            style={styles.unLikedFont}/>
                         </TouchableOpacity>
                     }
-                    <Text>likes: {this.state.likes}</Text>
+                <TouchableOpacity onPress={()=>this.showModal()}>
+                <Image 
+                source={"https://img.icons8.com/material-outlined/50/000000/comments--v2.png"}
+                style={styles.comentFont}/>
+                </TouchableOpacity>
+                <Text style={styles.lengthComentarios}>{this.props.doc.data.comments?this.props.doc.data.comments.length:0}</Text>
                 </View>
+
+                <Text style={styles.lengthMeGusta}>{this.state.likes} Me gusta</Text>
+
+                <View style={styles.fonts}>
+                <Text style={styles.lengthMeGusta}>{this.props.doc.data.owner}:</Text>
+                <Text style={styles.lengthMeGusta}> {this.props.doc.data.description}</Text>
+                </View>
+
                 {/* Activa el modal */}
                 <TouchableOpacity onPress={()=>this.showModal()}>
-                    <Text>Ver comentarios</Text>
+                    <Text style={styles.verComentarios}>Ver comentarios</Text>
                 </TouchableOpacity>
                 {/* Modal de comentarios */}
                 {
@@ -145,7 +156,7 @@ class Post extends Component {
                                 keyExtractor={ comment => comment.createdAt.toString()}
                                 renderItem={ ({item})=>
                                             <View>
-                                                <Text>{item.author}: {item.comment}</Text>
+                                                <Text>{item.autor}: {item.comment}</Text>
                                             </View>
                                             }
                         />
@@ -165,7 +176,7 @@ class Post extends Component {
                             </TouchableOpacity>
                         </View>
                     </Modal>:
-                    <Text></Text>
+                    null
                 }
             </View>
         )
@@ -183,9 +194,40 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 10,
         borderRadius: 5,
-        width:"90%",
-        height:300,
+        width:"95%",
+        height:"120%",
+        alignSelf:"center",
         flex:8
+    },
+    imageContainer:{
+        width:"95%", 
+        height:Dimensions.get('screen').height/2.7,
+        resizeMode:"cover",
+        alignSelf:"center",
+        marginVertical:8
+    },
+    fonts:{
+        flexDirection:"row",
+    },
+    unLikedFont:{
+        width:24,
+        height:24,
+        padding:5,
+        marginHorizontal:5,
+    },
+    comentFont:{
+        width:24,
+        height:24,
+        padding:5,
+        marginHorizontal:5
+    },
+    lengthComentarios:{
+        marginTop:3,
+        marginRight:3
+    },
+    lengthMeGusta:{
+        marginLeft:6,
+        marginVertical:5
     },
     modalContainer: {
         width:'90%',  
@@ -193,15 +235,15 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderRadius: 6,
         padding: 10,
-        boxShadow:'rgb(204 204 204) 0px 0px 13px 5px',
     },
     formContainer:{
         paddingHorizontal:10,
         marginTop: 10,
         width:'100%',
+        height:"30%"
     },
     multilineInput:{
-        height:50,
+        height:550,
         paddingVertical:5,
         paddingHorizontal: 10,
         borderWidth:1,
@@ -228,7 +270,7 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#dc3545',
         marginTop:2,
-        marginBotom: 10,
+        marginBottom: 10,
         borderRadius: 4,
     },
     modalText:{
@@ -237,6 +279,11 @@ const styles = StyleSheet.create({
     },
     comments:{
         alignItems: 'flex-start',
+    },
+    verComentarios:{
+        marginLeft:6,
+        marginTop:5,
+        marginBottom:10
     }
 })
 

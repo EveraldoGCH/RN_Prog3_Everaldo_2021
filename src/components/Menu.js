@@ -69,7 +69,7 @@ logOut(){
         <Drawer.Navigator>
             <Drawer.Screen name="Home" component={()=><Home log={this.state.logged}/>} />
             <Drawer.Screen name="Perfil" component={()=><Perfil logOut={()=>this.logOut()} nombrePerfil={this.state.nombre}/>} />
-            <Drawer.Screen name="Nuevo Post" component={()=><NuevoPost/>} />
+            <Drawer.Screen name="Nuevo Post" component={(drawerProps)=><NuevoPost drawerProps={drawerProps}/>} />
         </Drawer.Navigator>
         :
         <Drawer.Navigator style={styles.drawerNavigator}>
