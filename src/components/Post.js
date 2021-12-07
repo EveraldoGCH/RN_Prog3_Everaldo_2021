@@ -140,10 +140,12 @@ class Post extends Component {
                 {/* Modal de comentarios */}
                 {
                     this.state.showModal?
+                    <View style={styles.modalView}>
                     <Modal style={styles.modalContainer}
                         visible={this.state.showModal}
                         animationType="fade"
                         transparent={false}
+                        presentationStyle="pageSheet"
                     >
                         {/* Botón de cierre del modal */}
                         <TouchableOpacity style={styles.closeModal} onPress={()=>{this.closeModal()}}>
@@ -175,7 +177,9 @@ class Post extends Component {
                                 <Text style={styles.textButton}>Enviar comentario</Text>    
                             </TouchableOpacity>
                         </View>
-                    </Modal>:
+                    </Modal>
+                    </View>
+                    :
                     null
                 }
             </View>
@@ -230,11 +234,16 @@ const styles = StyleSheet.create({
         marginVertical:5
     },
     modalContainer: {
-        width:'90%',  
+        width:110,  
         alignSelf: 'center',
         backgroundColor: "white",
         borderRadius: 6,
         padding: 10,
+        height:110
+    },
+    modalView:{
+        width:"20%",
+        height:"20%"
     },
     formContainer:{
         paddingHorizontal:10,
